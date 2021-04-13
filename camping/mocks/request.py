@@ -18,11 +18,12 @@ class RequestMockError(Exception):
     pass
 
 class requests:
-    ridb_facilities_path = "../data/RIDB/facilities"
-    ridb_campsites_path = "../data/RIDB/campsites"
+    ridb_facilities_path = "../../data/RIDB/facilities"
+    ridb_campsites_path = "../../data/RIDB/campsites"
 
     @classmethod
     def do_request(cls, file):
+        logger.debug(f"requesting file: {file}")
         try:
             with open(file) as f:
                 return Response(text=json.load(f))
@@ -31,12 +32,14 @@ class requests:
 
     @classmethod
     def get(cls, url, params={}, headers={}):
-        if url.endswith("facilities"):
+        if params.get("latitude") is not None:
+            file = f"{cls.ridb_facilities_path}/{params['latitude']}_{params['longitude']}_{params['radius']}.json"
+        elif url.endswith("facilities"):
             file = f"{cls.ridb_facilities_path}/{params['state']}.json"
         elif url.endswith("campsites"):
             site_id = url.split("/")[-2]
             file = f"{cls.ridb_campsites_path}/{site_id}.json"
         else:
-            return Response(500, "Not found", f"No endpoint to service {url}")
+            return Response(500, "Not found", f"No mock data for {url}, params: {params}")
 
         return cls.do_request(file)
