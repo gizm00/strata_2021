@@ -1,3 +1,4 @@
+import json
 import pytest
 
 from request import requests
@@ -12,8 +13,11 @@ def test_get_facilities(state, expected):
 
 @pytest.mark.parametrize("site_id, expected", [("251434", 200), ("00000", 500)])
 def test_get_campsites(site_id, expected):
-    url = "https://ridb.recreation.gov/api/v1/facilities/251434/campsites"
-    requests.get(url)
+    url = f"https://ridb.recreation.gov/api/v1/facilities/{site_id}/campsites"
+    response = requests.get(url)
+    if response.status_code == 200:
+        res = json.loads(response.text)
+    assert response.status_code == expected
 
 def test_get_near():
     ridb_facilities_url = "https://ridb.recreation.gov/api/v1/facilities"

@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -18,17 +19,21 @@ class RequestMockError(Exception):
     pass
 
 class requests:
-    ridb_facilities_path = "../../data/RIDB/facilities"
-    ridb_campsites_path = "../../data/RIDB/campsites"
+    project_root = os.path.dirname(os.path.dirname(__file__))
+    print("root", project_root)
+    ridb_facilities_path = f"{project_root}/../data/RIDB/facilities"
+    ridb_campsites_path = f"{project_root}/../data/RIDB/campsites"
+    print(f"facilities path: {ridb_facilities_path}")
 
     @classmethod
     def do_request(cls, file):
         logger.debug(f"requesting file: {file}")
         try:
             with open(file) as f:
-                return Response(text=json.load(f))
+                # return Response(text=json.load(f))
+                return Response(text=f.read())
         except FileNotFoundError:
-            return Response(500, "Not found", f"No mock data")
+            return Response(500, "Not found", f"No mock data. file_name: {file}")
 
     @classmethod
     def get(cls, url, params={}, headers={}):
