@@ -1,5 +1,6 @@
-
+from bs4 import BeautifulSoup
 from copy import deepcopy
+from csv import DictReader
 import json
 import logging
 import os
@@ -9,8 +10,9 @@ logger = logging.getLogger(__name__)
 logger = logger.setLevel(logging.INFO)
 
 project_root = os.path.dirname(os.path.dirname(__file__))
-state_file_template = project_root + "/../../data/RIDB/facilities/{state}.json"
-campsite_file_template = project_root + "/../../data/RIDB/campsites/{facility_id}.json"
+mock_data_path = f"{project_root}/../data"
+state_file_template = mock_data_path + "/RIDB/facilities/{state}.json"
+campsite_file_template = mock_data_path + "/RIDB/campsites/{facility_id}.json"
 ridb_facilities_url = "https://ridb.recreation.gov/api/v1/facilities"
 campsite_details_url = ridb_facilities_url + "/{facility_id}/campsites"
 params = {"activity_id":9, "state":"OR"}
@@ -20,7 +22,7 @@ def get_facilities_near(params):
     """
     Expects latitude, longitude, radius to be set
     """
-    file_name = f"../../data/RIDB/facilities/{params['latitude']}_{params['longitude']}_{params['radius']}.json"
+    file_name = f"{mock_data_path}/RIDB/facilities/{params['latitude']}_{params['longitude']}_{params['radius']}.json"
     response = requests.get(ridb_facilities_url, params, headers=headers)
     if response.status_code == 200:
         with open(file_name, "w+") as f:
@@ -74,9 +76,35 @@ def get_campsites_for(facilities):
     for facility_id in facilities:
         get_campsites(facility_id)
 
+def get_nf_pages(pages):
+    """
+    pages: dict of {site_name: URL}
+    Fetch URL and write source to file site_name.html
+    """
+    for page in pages:
+        print(page)
+        file_name = page['site_name'].replace("/", "-")
+        file_path = f"../../data/NF_sites/{file_name}.html"
+        res = requests.get(page['site_url'])
+        if res.status_code != 200:
+            logger.error(f"Unable to get page {page['site_url']}. Response: {res.reason}")
+            continue
+        with open(file_path, 'w+') as f:
+            f.write(res.text)
+
+def get_nf_sites(path):
+    nf_sites = []
+    with open(path) as f:
+        reader = DictReader(f)
+        for row in reader:
+            nf_sites.append(row)
+    
+    get_nf_pages(nf_sites)
+
 
 if __name__ == '__main__':
-    get_facilities_near(params = {"activity_id":9, "latitude":45.4977712, "longitude":-121.8211673, "radius":15})
+    get_nf_sites(f"../../data/or_nf_campgrounds.csv")
+    # get_facilities_near(params = {"activity_id":9, "latitude":45.4977712, "longitude":-121.8211673, "radius":15})
 #     states = ['WA', 'CA']
 #     state_files = get_facilities_for(states)
 #     print(state_files)
