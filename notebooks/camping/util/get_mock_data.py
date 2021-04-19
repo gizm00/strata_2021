@@ -9,10 +9,11 @@ import requests
 logger = logging.getLogger(__name__)
 logger = logger.setLevel(logging.INFO)
 
-project_root = os.path.dirname(os.path.dirname(__file__))
-mock_data_path = f"{project_root}/../data"
-state_file_template = mock_data_path + "/RIDB/facilities/{state}.json"
-campsite_file_template = mock_data_path + "/RIDB/campsites/{facility_id}.json"
+file_dir = os.path.dirname(__file__)
+relative_to_root = "../../.."
+mock_data_path = f"{file_dir}/{relative_to_root}"
+state_file_template = mock_data_path + "/data/RIDB/facilities/{state}.json"
+campsite_file_template = mock_data_path + "/data/RIDB/campsites/{facility_id}.json"
 ridb_facilities_url = "https://ridb.recreation.gov/api/v1/facilities"
 campsite_details_url = ridb_facilities_url + "/{facility_id}/campsites"
 params = {"activity_id":9, "state":"OR"}

@@ -19,11 +19,10 @@ class RequestMockError(Exception):
     pass
 
 class requests:
-    project_root = os.path.dirname(os.path.dirname(__file__))
-    print("root", project_root)
-    ridb_facilities_path = f"{project_root}/../data/RIDB/facilities"
-    ridb_campsites_path = f"{project_root}/../data/RIDB/campsites"
-    print(f"facilities path: {ridb_facilities_path}")
+    file_dir = os.path.dirname(__file__)
+    relative_to_root = "../../.."
+    ridb_facilities_path = f"{file_dir}/{relative_to_root}/data/RIDB/facilities"
+    ridb_campsites_path = f"{file_dir}/{relative_to_root}/data/RIDB/campsites"
 
     @classmethod
     def do_request(cls, file):
