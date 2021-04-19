@@ -16,7 +16,7 @@ campsite_file_template = mock_data_path + "/RIDB/campsites/{facility_id}.json"
 ridb_facilities_url = "https://ridb.recreation.gov/api/v1/facilities"
 campsite_details_url = ridb_facilities_url + "/{facility_id}/campsites"
 params = {"activity_id":9, "state":"OR"}
-headers = {"accept": "application/json", "apikey": "b2b7cf12-0a8a-413b-aa75-3125b41977b8"}
+headers = {"accept": "application/json", "apikey": ""}
 
 def get_facilities_near(params):
     """
