@@ -18,7 +18,7 @@ class Response:
 class RequestMockError(Exception):
     pass
 
-class requests:
+class RequestsMock:
     file_dir = os.path.dirname(__file__)
     relative_to_root = "../../.."
     ridb_facilities_path = f"{file_dir}/{relative_to_root}/data/RIDB/facilities"
@@ -29,7 +29,6 @@ class requests:
         logger.debug(f"requesting file: {file}")
         try:
             with open(file) as f:
-                # return Response(text=json.load(f))
                 return Response(text=f.read())
         except FileNotFoundError:
             return Response(500, "Not found", f"No mock data. file_name: {file}")

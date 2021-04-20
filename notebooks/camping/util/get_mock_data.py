@@ -17,7 +17,7 @@ campsite_file_template = mock_data_path + "/data/RIDB/campsites/{facility_id}.js
 ridb_facilities_url = "https://ridb.recreation.gov/api/v1/facilities"
 campsite_details_url = ridb_facilities_url + "/{facility_id}/campsites"
 params = {"activity_id":9, "state":"OR"}
-headers = {"accept": "application/json", "apikey": ""}
+headers = {"accept": "application/json", "apikey": "b2b7cf12-0a8a-413b-aa75-3125b41977b8"}
 
 def get_facilities_near(params):
     """
@@ -104,7 +104,7 @@ def get_nf_sites(path):
 
 
 if __name__ == '__main__':
-    get_nf_sites(f"../../data/or_nf_campgrounds.csv")
+    # get_nf_sites(f"../../data/or_nf_campgrounds.csv")
     # get_facilities_near(params = {"activity_id":9, "latitude":45.4977712, "longitude":-121.8211673, "radius":15})
 #     states = ['WA', 'CA']
 #     state_files = get_facilities_for(states)
