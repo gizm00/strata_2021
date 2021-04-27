@@ -65,6 +65,7 @@ class Scraper:
         if cg_req.status_code == 200:
             cg_soup = BeautifulSoup(cg_req.text, features="html.parser")
             return cg_soup
+        return None
 
     # extract information from USFS webpages
     # expects row with columns url and facilityname
